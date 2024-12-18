@@ -20,7 +20,7 @@ import de.mibtex.export.typo3.Typo3Entry;
  */
 public class ExportNewHTML extends Export {
     private Map<String, String> bibTagsVariables;
-    
+
     public ExportNewHTML(String path, String file) throws Exception {
         super(path, file);
     }
@@ -29,9 +29,8 @@ public class ExportNewHTML extends Export {
     public void writeDocument() {
         bibTagsVariables = ExportTypo3Bibtex.readVariablesFromBibtexFile(new File(
                 BibtexViewer.BIBTEX_DIR,
-                ExportTypo3Bibtex.VariablesFile
-        ));
-        
+                ExportTypo3Bibtex.VariablesFile));
+
         String input = readFromFile("resources/", new File("index_in.html"));
         StringBuilder HTML = new StringBuilder();
         Set<String> venues = new HashSet<>();
@@ -52,7 +51,7 @@ public class ExportNewHTML extends Export {
         }
         input = input.replace("DATA_INSERT_HERE", HTML.toString());
         input = input.replace("INSERT_BIB_PATH", BibtexViewer.BIBTEX_DIR
-                + "literature.bib");
+                + "literature-for-reading.bib");
         input = insertOptionsStr(input, "INSERT_VENUE_OPTIONS", venues);
         input = insertOptionsStr(input, "INSERT_TAG_OPTIONS", tags);
         input = insertOptionsInt(input, "INSERT_YEAR_OPTIONS", years);
@@ -61,7 +60,7 @@ public class ExportNewHTML extends Export {
     }
 
     private String insertOptionsStr(String input, String replace,
-                                    Set<String> set) {
+            Set<String> set) {
         StringBuilder HTML = new StringBuilder();
         for (String el : set) {
             HTML.append("<option value=\"").append(el).append("\">");
@@ -70,7 +69,7 @@ public class ExportNewHTML extends Export {
     }
 
     private String insertOptionsInt(String input, String replace,
-                                    Set<Integer> set) {
+            Set<Integer> set) {
         StringBuilder HTML = new StringBuilder();
         for (int el : set) {
             HTML.append("<option value=\"").append(el).append("\">");
@@ -83,18 +82,18 @@ public class ExportNewHTML extends Export {
     }
 
     private String generateAuthorLinks(BibtexEntry entry) {
-    	List<String> authors;
+        List<String> authors;
         if (entry.authorList.isEmpty()) {
-        	authors = new ArrayList<>(1);
-        	authors.add("unknown");
+            authors = new ArrayList<>(1);
+            authors.add("unknown");
         } else {
-        	authors = entry.authorList;
+            authors = entry.authorList;
         }
 
         StringBuilder HTML = new StringBuilder();
         for (String author : authors) {
             HTML.append("<a href=\"\" onclick=\"setTag('searchAuthor','").append(author.trim())
-                .append("');event.preventDefault();Filter();\">").append(author).append("</a>, ");
+                    .append("');event.preventDefault();Filter();\">").append(author).append("</a>, ");
         }
         HTML.deleteCharAt(HTML.length() - 1);
         HTML.deleteCharAt(HTML.length() - 2);
@@ -109,33 +108,31 @@ public class ExportNewHTML extends Export {
 
     private String generateTagLinks(BibtexEntry entry) {
         final Typo3Entry entryAsT3 = ExportTypo3Bibtex.applyModifiers(
-                new Typo3Entry(entry, bibTagsVariables)
-        );
+                new Typo3Entry(entry, bibTagsVariables));
 
         StringBuilder html = new StringBuilder();
-		if (entry.getCommentsPath().exists()) {
-			html.append(" <a href=\"");
-			html.append(entry.getRelativeCommentsPath());
-			html.append("\">");
-			html.append(entry.key);
-			html.append("</a>, ");
-		}
-		else {
-			html.append(entry.key).append(", ");
-		}
+        if (entry.getCommentsPath().exists()) {
+            html.append(" <a href=\"");
+            html.append(entry.getRelativeCommentsPath());
+            html.append("\">");
+            html.append(entry.key);
+            html.append("</a>, ");
+        } else {
+            html.append(entry.key).append(", ");
+        }
         // DOI
-		if (!entry.doi.isEmpty()) {
-			html.append("<a href=\"https://dx.doi.org/");
-			html.append(entry.doi);
-			html.append("\">doi</a>, ");
-		}
+        if (!entry.doi.isEmpty()) {
+            html.append("<a href=\"https://dx.doi.org/");
+            html.append(entry.doi);
+            html.append("\">doi</a>, ");
+        }
         // URL
         final boolean hasURL = !entry.url.isEmpty();
-		if (hasURL) {
-			html.append("<a href=\"");
-			html.append(entry.url);
-			html.append("\">url</a>, ");
-		}
+        if (hasURL) {
+            html.append("<a href=\"");
+            html.append(entry.url);
+            html.append("\">url</a>, ");
+        }
         // Typo3 URL for preprints
         final boolean hasT3URL = !entryAsT3.url.isBlank();
         if (hasT3URL && !(hasURL && entry.url.equals(entryAsT3.url))) {
@@ -145,9 +142,9 @@ public class ExportNewHTML extends Export {
         }
         // other tags
         for (int i = 0; i < BibtexViewer.TAGS.size(); i++) {
-        	String tag = BibtexViewer.TAGS.get(i);
-        	List<String> tags = entry.tagList.get(tag);
-        	if (tags != null) {
+            String tag = BibtexViewer.TAGS.get(i);
+            List<String> tags = entry.tagList.get(tag);
+            if (tags != null) {
                 String prefix = tag.replace("-tags", ":").replace("Tags", ":");
                 for (int j = 0; j < tags.size(); j++) {
                     html.append("<a href=\"\" onclick=\"setTag('searchTag','");
@@ -156,7 +153,7 @@ public class ExportNewHTML extends Export {
                     html.append(prefix).append(tags.get(j).trim());
                     html.append("</a>, ");
                 }
-        	}
+            }
         }
         html.delete(html.lastIndexOf(","), html.length());
         return html.toString();
@@ -169,7 +166,7 @@ public class ExportNewHTML extends Export {
         for (List<String> tagList : entry.tagList.values()) {
             String prefix = BibtexViewer.TAGS.get(i).replace("tags", "");
             for (String tag : tagList) {
-                String combinedTag = (i!=0?prefix:"") + tag;
+                String combinedTag = (i != 0 ? prefix : "") + tag;
                 tags.add(combinedTag);
             }
             i += 1;

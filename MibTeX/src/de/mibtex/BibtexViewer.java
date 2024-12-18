@@ -55,14 +55,17 @@ public class BibtexViewer {
      * <p>
      * BibtexViewer "C:\\Users\\tthuem\\workspace4.2.1\\tthuem-Bibtex\\"
      * "C:\\Users\\tthuem\\Dropbox\\Literatur\\" "HTML\\" "..\\Library\\"
-     * "Library\\" "tt-tags" "CSV/JSON/HTML/Classification" "true" "C:\\Users\\tthuem\\workspace4.2.1\\tthuem-Bibtex\\"
+     * "Library\\" "tt-tags" "CSV/JSON/HTML/Classification" "true"
+     * "C:\\Users\\tthuem\\workspace4.2.1\\tthuem-Bibtex\\"
      *
      * @param args array containing:
      *             - path to Bibtex file path to main directory
      *             - relative path of the HTML to main directory
-     *             - relative path of PDF files to the HTML folder (for linking files in HTML)
+     *             - relative path of PDF files to the HTML folder (for linking
+     *             files in HTML)
      *             - relative path of PDF files to main directory
-     *             - list of the tag containing your keywords (format: "tag1,tag2,tag3")
+     *             - list of the tag containing your keywords (format:
+     *             "tag1,tag2,tag3")
      *             - format for export (CSV/JSON/HTML)
      *             - boolean for output cleaning (default: false)
      *             - boolean for update citations file (default:true)
@@ -170,40 +173,41 @@ public class BibtexViewer {
 
     public BibtexViewer(String format) throws Exception {
         Export exporter = null;
+        String fileName = "literature-for-reading.bib";
         switch (format.toUpperCase()) {
             case "CSV":
-                exporter = new ExportCSV(BibtexViewer.BIBTEX_DIR, "literature.bib");
+                exporter = new ExportCSV(BibtexViewer.BIBTEX_DIR, fileName);
                 break;
             case "JSON":
-                exporter = new ExportJSON(BibtexViewer.BIBTEX_DIR, "literature.bib");
+                exporter = new ExportJSON(BibtexViewer.BIBTEX_DIR, fileName);
                 break;
             case "CITATIONS":
-                exporter = new ExportCitations(BibtexViewer.BIBTEX_DIR, "literature.bib");
+                exporter = new ExportCitations(BibtexViewer.BIBTEX_DIR, fileName);
                 break;
             case "CONFLICTS":
-                exporter = new ExportConflicts(BibtexViewer.BIBTEX_DIR, "literature.bib");
+                exporter = new ExportConflicts(BibtexViewer.BIBTEX_DIR, fileName);
                 break;
             case "CLASSIFICATION":
-                exporter = new ExportClassification(BibtexViewer.BIBTEX_DIR, "literature.bib");
+                exporter = new ExportClassification(BibtexViewer.BIBTEX_DIR, fileName);
                 break;
             case "SAMPLING":
-                exporter = new ExportSampling(BibtexViewer.BIBTEX_DIR, "literature.bib");
+                exporter = new ExportSampling(BibtexViewer.BIBTEX_DIR, fileName);
                 break;
             case "SAMPLING LATEX":
-                exporter = new ExportSamplingLatex(BibtexViewer.BIBTEX_DIR, "literature.bib");
+                exporter = new ExportSamplingLatex(BibtexViewer.BIBTEX_DIR, fileName);
                 break;
             case "HTML_NEW":
-                exporter = new ExportNewHTML(BibtexViewer.BIBTEX_DIR, "literature.bib");
+                exporter = new ExportNewHTML(BibtexViewer.BIBTEX_DIR, fileName);
                 break;
             case "FIND_PDFS":
-                exporter = new ExportFindPDFs(BibtexViewer.BIBTEX_DIR, "literature.bib");
+                exporter = new ExportFindPDFs(BibtexViewer.BIBTEX_DIR, fileName);
                 break;
             case "TYPO3":
-            	exporter = new ExportTypo3Bibtex(BibtexViewer.BIBTEX_DIR, "literature.bib");
-            	break;
+                exporter = new ExportTypo3Bibtex(BibtexViewer.BIBTEX_DIR, fileName);
+                break;
             case "HTML":
             default:
-                exporter = new ExportHTML(BibtexViewer.BIBTEX_DIR, "literature.bib");
+                exporter = new ExportHTML(BibtexViewer.BIBTEX_DIR, fileName);
         }
         if (cleanOutputDir) {
             Export.cleanOutputFolder();
